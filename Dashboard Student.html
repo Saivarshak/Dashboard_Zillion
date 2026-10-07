@@ -1,0 +1,1199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>NEXUS Student Hub</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@600;800&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<style>
+    :root {
+    --bg: #ffffff;
+    --card: rgba(255, 255, 255, 0.82);
+    --ink: #14213d;
+    --mut: #5b6784;
+    --line: rgba(180, 185, 220, 0.45);
+
+    --acc: #0f766e;
+    --acc2: #1d4ed8;
+
+    --ok: #047857;
+    --warn: #b45309;
+    --bad: #be123c;
+
+    --soft: rgba(255, 255, 255, 0.55);
+    --grid: rgba(20, 33, 61, 0.08);
+
+    box-sizing: border-box;
+    padding-top: env(safe-area-inset-top, 0px);
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+:root[data-theme="light"] {
+    --bg: #ffffff;
+
+    --card: rgba(255, 255, 255, 0.82);
+
+    --ink: #14213d;
+    --mut: #5b6784;
+
+    --line: rgba(180, 185, 220, 0.45);
+
+    --acc: #0f766e;
+    --acc2: #1d4ed8;
+
+    --ok: #047857;
+    --warn: #b45309;
+    --bad: #be123c;
+
+    --soft: rgba(255, 255, 255, 0.55);
+
+    --grid: rgba(20, 33, 61, 0.08);
+}
+
+:root[data-theme="dark"] {
+    --bg: #120d24;
+
+    --card: rgba(30, 22, 55, 0.82);
+
+    --ink: #f4efff;
+    --mut: #b9acd6;
+
+    --line: rgba(150, 120, 210, 0.25);
+
+    --acc: #a78bfa;
+    --acc2: #818cf8;
+
+    --ok: #6ee7b7;
+    --warn: #fbbf24;
+    --bad: #fb7185;
+
+    --soft: rgba(94, 70, 150, 0.22);
+
+    --grid: rgba(255, 255, 255, 0.08);
+}
+
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+}
+
+html {
+    scroll-padding-top: env(safe-area-inset-top, 0px);
+    scroll-behavior: smooth;
+}
+
+body {
+    color: var(--ink);
+
+    font:
+        15px/1.5
+        'Instrument Sans',
+        system-ui,
+        sans-serif;
+
+    min-height: 100vh;
+
+    background:
+        radial-gradient(
+            ellipse 80% 55% at 50% 55%,
+            rgba(205, 210, 255, 0.95) 0%,
+            rgba(220, 208, 253, 0.88) 35%,
+            rgba(245, 228, 253, 0.72) 62%,
+            rgba(255, 255, 255, 0.98) 100%
+        ),
+        #ffffff;
+
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+    background-size: cover;
+
+    transition:
+        background 0.45s ease,
+        color 0.3s ease;
+}
+
+:root[data-theme="dark"] body {
+    background:
+        radial-gradient(
+            ellipse 85% 65% at 50% 55%,
+            rgba(91, 63, 160, 0.78) 0%,
+            rgba(67, 45, 125, 0.68) 32%,
+            rgba(35, 24, 67, 0.88) 65%,
+            rgba(18, 13, 36, 1) 100%
+        ),
+        #120d24;
+
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+h1,
+h2,
+h3 {
+    font-family: Fraunces, Georgia, serif;
+    letter-spacing: -0.01em;
+}
+
+
+header {
+    position: sticky;
+
+    top: env(safe-area-inset-top, 0px);
+
+    z-index: 20;
+
+    background: var(--card);
+
+    border-bottom: 1px solid var(--line);
+
+    padding: 0.7rem 1.25rem;
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    gap: 0.5rem;
+
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+
+    transition:
+        background 0.3s ease,
+        border-color 0.3s ease;
+}
+
+
+.logo {
+    font:
+        800 1.25rem
+        Fraunces,
+        serif;
+
+    cursor: pointer;
+
+    border: 0;
+
+    background: none;
+
+    color: var(--ink);
+}
+
+.logo small {
+    font:
+        500 0.8rem
+        'Instrument Sans';
+
+    color: var(--mut);
+
+    margin-left: 0.5rem;
+}
+
+
+.row {
+    display: flex;
+
+    gap: 0.5rem;
+
+    align-items: center;
+
+    flex-wrap: wrap;
+}
+
+button,
+select,
+input {
+    font: inherit;
+
+    color: inherit;
+}
+.btn {
+    padding: 0.5rem 0.95rem;
+
+    border-radius: 8px;
+
+    border: 1px solid var(--line);
+
+    background: var(--card);
+
+    cursor: pointer;
+
+    font-weight: 600;
+
+    font-size: 0.85rem;
+
+    transition:
+        border-color 0.2s ease,
+        background 0.2s ease,
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.btn:hover {
+    border-color: var(--acc);
+
+    transform: translateY(-1px);
+}
+
+.btn:active {
+    transform: translateY(0);
+}
+
+.btn:focus-visible,
+input:focus-visible,
+select:focus-visible,
+th[data-k]:focus-visible {
+    outline: 2px solid var(--acc2);
+
+    outline-offset: 2px;
+}
+
+
+.btn.p {
+    background: var(--acc);
+
+    border-color: var(--acc);
+
+    color: #ffffff;
+
+    box-shadow:
+        0 4px 12px rgba(15, 118, 110, 0.18);
+}
+
+
+
+:root[data-theme="dark"] .btn.p {
+    color: #160f2d;
+
+    box-shadow:
+        0 4px 18px rgba(167, 139, 250, 0.2);
+}
+
+.btn.d {
+    color: var(--bad);
+}
+
+main {
+    max-width: 1280px;
+
+    margin: 0 auto;
+
+    padding:
+        1.5rem
+        1.25rem
+        3rem;
+}
+
+.view {
+    display: none;
+}
+
+.view.on {
+    display: block;
+}
+
+
+.card {
+    background: var(--card);
+
+    border: 1px solid var(--line);
+
+    border-radius: 12px;
+
+    padding: 1.25rem;
+
+
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+
+    box-shadow:
+        0 8px 30px rgba(50, 40, 100, 0.06);
+
+    transition:
+        background 0.3s ease,
+        border-color 0.3s ease,
+        box-shadow 0.3s ease;
+}
+
+
+:root[data-theme="dark"] .card {
+    box-shadow:
+        0 10px 35px rgba(0, 0, 0, 0.2);
+}
+
+
+
+.auth {
+    display: grid;
+
+    grid-template-columns:
+        1.1fr
+        1fr;
+
+    gap: 2rem;
+
+    align-items: center;
+
+    min-height: 70vh;
+}
+
+
+@media (max-width: 860px) {
+    .auth {
+        grid-template-columns: 1fr;
+    }
+}
+
+
+.auth h1 {
+    font-size:
+        clamp(
+            2rem,
+            5vw,
+            3.2rem
+        );
+
+    line-height: 1.08;
+
+    margin-bottom: 1rem;
+}
+
+.auth p {
+    color: var(--mut);
+
+    max-width: 46ch;
+}
+
+
+.hint {
+    margin-top: 1.25rem;
+
+    padding:
+        0.75rem
+        1rem;
+
+    border-left:
+        3px solid
+        var(--acc);
+
+    background: var(--soft);
+
+    font-size: 0.85rem;
+
+    border-radius:
+        0
+        8px
+        8px
+        0;
+
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+}
+
+.tabs {
+    display: flex;
+
+    gap: 4px;
+
+    background: rgba(255, 255, 255, 0.25);
+
+    padding: 4px;
+
+    border-radius: 10px;
+
+    margin-bottom: 1.1rem;
+
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+}
+
+:root[data-theme="dark"] .tabs {
+    background: rgba(0, 0, 0, 0.18);
+}
+
+
+.tabs button {
+    flex: 1;
+
+    padding: 0.55rem;
+
+    border: 0;
+
+    background: none;
+
+    border-radius: 7px;
+
+    cursor: pointer;
+
+    font-weight: 600;
+
+    color: var(--mut);
+
+    transition:
+        background 0.2s ease,
+        color 0.2s ease;
+}
+
+
+.tabs button.on {
+    background: var(--card);
+
+    color: var(--ink);
+
+    box-shadow:
+        0 1px 3px rgba(0, 0, 0, 0.15);
+}
+
+
+label {
+    display: block;
+
+    font-size: 0.8rem;
+
+    font-weight: 600;
+
+    color: var(--mut);
+
+    margin:
+        0
+        0.3rem;
+}
+.f {
+    margin-bottom: 0.9rem;
+}
+
+
+input,
+select {
+    width: 100%;
+
+    padding:
+        0.6rem
+        0.75rem;
+
+    background: rgba(255, 255, 255, 0.45);
+
+    border:
+        1px solid
+        var(--line);
+
+    border-radius: 8px;
+
+    transition:
+        background 0.2s ease,
+        border-color 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+
+:root[data-theme="dark"] input,
+:root[data-theme="dark"] select {
+    background: rgba(10, 7, 25, 0.35);
+}
+
+
+input:focus,
+select:focus {
+    border-color: var(--acc2);
+
+    box-shadow:
+        0 0 0 3px
+        rgba(29, 78, 216, 0.1);
+
+    outline: none;
+}
+
+
+
+.g2 {
+    display: grid;
+
+    grid-template-columns:
+        1fr
+        1fr;
+
+    gap: 0.75rem;
+}
+
+.msg {
+    display: none;
+
+    padding:
+        0.6rem
+        0.8rem;
+
+    border-radius: 8px;
+
+    margin-bottom: 0.9rem;
+
+    font-size: 0.85rem;
+}
+
+
+.msg.e {
+    background:
+        rgba(190, 18, 60, 0.12);
+
+    color: var(--bad);
+}
+
+
+.msg.s {
+    background:
+        rgba(4, 120, 87, 0.14);
+
+    color: var(--ok);
+}
+
+
+
+.hero {
+    display: flex;
+
+    gap: 1.5rem;
+
+    align-items: center;
+
+    flex-wrap: wrap;
+
+    margin-bottom: 1.25rem;
+}
+
+
+.av {
+    width: 72px;
+
+    height: 72px;
+
+    border-radius: 50%;
+
+    background: var(--acc);
+
+    color: #ffffff;
+
+    display: grid;
+
+    place-items: center;
+
+    font:
+        800 1.8rem
+        Fraunces,
+        serif;
+
+    box-shadow:
+        0 8px 20px
+        rgba(15, 118, 110, 0.18);
+}
+
+
+
+.cg {
+    margin-left: auto;
+
+    text-align: right;
+}
+
+.cg b {
+    font:
+        800 3.2rem/1
+        Fraunces,
+        serif;
+
+    color: var(--acc);
+}
+
+
+.stats {
+    display: grid;
+
+    grid-template-columns:
+        repeat(
+            auto-fit,
+            minmax(200px, 1fr)
+        );
+
+    gap: 1rem;
+
+    margin-bottom: 1.25rem;
+}
+
+.stat.big b {
+    font-size: 3rem;
+
+    color: var(--acc);
+}
+
+.stat span {
+    font-size: 0.8rem;
+
+    color: var(--mut);
+}
+
+
+.stat b {
+    display: block;
+
+    font:
+        800 1.7rem
+        Fraunces,
+        serif;
+
+    margin:
+        0.15rem
+        0;
+}
+
+
+.stat small {
+    color: var(--mut);
+
+    font-size: 0.8rem;
+}
+
+.bar {
+    height: 6px;
+
+    background: var(--line);
+
+    border-radius: 6px;
+
+    overflow: hidden;
+
+    margin: 0.3rem 0;
+}
+
+
+.bar i {
+    display: block;
+
+    height: 100%;
+
+    background: var(--acc);
+
+    border-radius: inherit;
+
+    transition:
+        width 0.5s ease;
+}
+
+.grid {
+    display: grid;
+
+    grid-template-columns:
+        2fr
+        1fr;
+
+    gap: 1rem;
+
+    margin-bottom: 1.25rem;
+}
+@media (max-width: 960px) {
+    .grid {
+        grid-template-columns: 1fr;
+    }
+}
+.ch {
+    height: 280px;
+
+    position: relative;
+}
+
+.tw {
+    overflow-x: auto;
+
+    border-radius: 8px;
+}
+
+
+table {
+    width: 100%;
+
+    border-collapse: collapse;
+
+    font-size: 0.88rem;
+}
+
+th {
+    text-align: left;
+
+    padding:
+        0.6rem
+        0.7rem;
+
+    color: var(--mut);
+
+    font-weight: 600;
+
+    border-bottom:
+        1px solid
+        var(--line);
+
+    white-space: nowrap;
+}
+
+
+th[data-k] {
+    cursor: pointer;
+
+    user-select: none;
+}
+
+
+td {
+    padding:
+        0.6rem
+        0.7rem;
+
+    border-bottom:
+        1px solid
+        var(--line);
+}
+
+
+tr:hover td {
+    background: var(--soft);
+}
+
+
+.b {
+    display: inline-block;
+
+    padding:
+        0.12rem
+        0.55rem;
+
+    border-radius: 99px;
+
+    font-size: 0.75rem;
+
+    font-weight: 600;
+
+    background: var(--soft);
+
+    color: var(--acc);
+}
+
+
+.b.ok {
+    background:
+        rgba(248, 255, 253, 0.85);
+
+    color: var(--ok);
+}
+
+
+.b.w {
+    background:
+        rgba(246, 241, 238, 0.83);
+
+    color: var(--warn);
+}
+
+
+.b.x {
+    background:
+        rgba(242, 234, 236, 0.86);
+
+    color: var(--bad);
+}
+
+
+:root[data-theme="dark"] .b.ok {
+    background:
+        rgba(52, 211, 153, 0.12);
+}
+
+:root[data-theme="dark"] .b.w {
+    background:
+        rgba(251, 191, 36, 0.12);
+}
+
+:root[data-theme="dark"] .b.x {
+    background:
+        rgba(251, 113, 133, 0.12);
+}
+
+
+.tools {
+    display: flex;
+
+    gap: 0.6rem;
+
+    margin-bottom: 1rem;
+
+    flex-wrap: wrap;
+}
+
+
+.tools input,
+.tools select {
+    flex: 1;
+
+    min-width: 170px;
+}
+
+
+.top {
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: end;
+
+    flex-wrap: wrap;
+
+    gap: 0.75rem;
+
+    margin-bottom: 1.25rem;
+}
+
+
+.modal {
+    display: none;
+
+    position: fixed;
+
+    inset: 0;
+
+    background:
+        rgba(255, 255, 255, 0.72);
+
+    backdrop-filter: blur(12px);
+
+    -webkit-backdrop-filter: blur(12px);
+
+    z-index: 50;
+
+    align-items: center;
+
+    justify-content: center;
+
+    padding: 1rem;
+}
+
+
+:root[data-theme="dark"] .modal {
+    background:
+        rgba(18, 13, 36, 0.78);
+}
+
+
+.modal.on {
+    display: flex;
+}
+
+
+.modal .card {
+    width: 100%;
+
+    max-width: 620px;
+
+    max-height: 90vh;
+
+    overflow: auto;
+}
+
+
+#toast {
+    position: fixed;
+
+    bottom:
+        calc(
+            1rem +
+            env(
+                safe-area-inset-bottom,
+                0px
+            )
+        );
+
+    left: 50%;
+
+    transform:
+        translateX(-50%);
+
+    background: var(--ink);
+
+    color: var(--bg);
+
+    padding:
+        0.6rem
+        1rem;
+
+    border-radius: 8px;
+
+    opacity: 0;
+
+    pointer-events: none;
+
+    transition:
+        opacity 0.2s ease;
+
+    z-index: 99;
+}
+
+
+#toast.on {
+    opacity: 1;
+}
+
+
+@media (max-width: 600px) {
+
+    main {
+        padding:
+            1rem
+            0.85rem
+            2rem;
+    }
+
+    header {
+        padding:
+            0.65rem
+            0.85rem;
+    }
+
+    .logo {
+        font-size: 1.1rem;
+    }
+
+    .logo small {
+        display: none;
+    }
+
+    .g2 {
+        grid-template-columns: 1fr;
+    }
+
+    .cg {
+        margin-left: 0;
+
+        text-align: left;
+    }
+
+    .stats {
+        grid-template-columns: 1fr;
+    }
+
+    .tools input,
+    .tools select {
+        min-width: 100%;
+    }
+}
+
+
+@media (prefers-reduced-motion: reduce) {
+
+    *,
+    *::before,
+    *::after {
+        transition: none !important;
+
+        animation: none !important;
+
+        scroll-behavior: auto !important;
+    }
+}
+</style>
+</head>
+<body>
+<header>
+<button class="logo" id="home">NEXUS<small>Student Hub</small></button>
+<div class="row">
+<button class="btn" id="theme" aria-label="Toggle theme">Theme</button>
+<button class="btn p" id="out" style="display:none">Sign out</button>
+</div>
+</header>
+<main>
+<section id="auth" class="view on">
+<div class="auth">
+<div>
+<h1>Attendance, marks and CGPA in one place.</h1>
+<p>Students check their own standing. Admins grade, enroll and export records for the whole cohort.</p>
+<div class="hint"><b>New here?</b> Register, then wait for an admin to approve you. Once approved, sign in with your roll number or SUC code.<br><b>Try it:</b> SUC <code>2026108491</code>, password <code>student@2026</code>.</div>
+</div>
+<div class="card">
+<div class="tabs" role="tablist"><button class="on" data-t="l">Student sign in</button><button data-t="r">Register</button><button data-t="a">Admin</button></div>
+<div id="amsg" class="msg" role="alert"></div>
+<form id="fl">
+<div class="f"><label for="ls">SUC code or roll number</label><input id="ls" autocomplete="username" required></div>
+<div class="f"><label for="lp">Password</label><input id="lp" type="password" autocomplete="current-password" required></div>
+<button class="btn p" style="width:100%">Open my dashboard</button>
+</form>
+<form id="fr" style="display:none">
+<div class="g2"><div class="f"><label for="rn">Full name</label><input id="rn" required></div><div class="f"><label for="ra">Age</label><input id="ra" type="number" min="16" max="40" value="19" required></div></div>
+<div class="g2"><div class="f"><label for="rc">Course</label><select id="rc" class="cs"></select></div><div class="f"><label for="rs">Section</label><input id="rs" placeholder="e.g. Alpha-1" required></div></div>
+<div class="f"><label for="rr">Roll number</label><input id="rr" placeholder="e.g. AP-26-042" required></div>
+<div class="f"><label for="rp">Password (6+ characters)</label><input id="rp" type="password" minlength="6" autocomplete="new-password" required></div>
+<button class="btn p" style="width:100%">Send registration request</button>
+</form>
+<form id="fa" style="display:none">
+<div class="f"><label for="au">Admin name</label><input id="au" autocomplete="username" required></div>
+<div class="f"><label for="ap">Admin code</label><input id="ap" type="password" autocomplete="current-password" required></div>
+<button class="btn p" style="width:100%">Open admin console</button>
+</form>
+</div>
+</div>
+</section>
+
+<section id="stu" class="view">
+<div class="card hero"><div class="av" id="sav"></div><div><h2 id="snm"></h2><p id="smt" style="color:var(--mut)"></p></div></div>
+<div class="stats" id="sst"></div>
+<div class="card" style="margin-bottom:1.25rem"><h3>Attendance and marks by subject</h3><div class="ch"><canvas id="c1"></canvas></div></div>
+<div class="card"><h3 style="margin-bottom:.75rem">Semester scorecard</h3><div class="tw"><table><thead><tr><th>Code</th><th>Course</th><th>Attendance</th><th>Mid 1</th><th>Mid 2</th><th>Total</th></tr></thead><tbody id="stb"></tbody></table></div></div>
+</section>
+
+<section id="adm" class="view">
+<div class="top"><div><h2>Admin console</h2><p style="color:var(--mut)">Signed in as Admin</p></div>
+<div class="row"><button class="btn p" id="add">Add student</button><button class="btn" id="csv">Export CSV</button><button class="btn d" id="rst">Restore defaults</button></div></div>
+<div class="stats" id="ast"></div>
+<div class="card" style="margin-bottom:1rem"><h3>Registration requests</h3><div id="reql" style="margin-top:.5rem"></div></div>
+<div class="grid">
+<div class="card"><h3>Average CGPA by course</h3><div class="ch"><canvas id="c3"></canvas></div></div>
+<div class="card"><h3>Needs attention</h3><div id="risk" style="margin-top:.5rem"></div></div>
+</div>
+<div class="card">
+<div class="tools"><input id="q" placeholder="Search name, SUC or roll number" aria-label="Search"><select id="fc" class="cs" aria-label="Filter by course"></select></div>
+<div class="tw"><table><thead><tr>
+<th data-k="suc" tabindex="0">SUC</th><th data-k="name" tabindex="0">Name</th><th data-k="course" tabindex="0">Course</th><th>Sec / Roll</th><th data-k="attendance" tabindex="0">Attendance</th><th data-k="cgpa" tabindex="0">CGPA</th><th>Password</th><th></th></tr></thead><tbody id="atb"></tbody></table></div>
+<p id="empty" style="display:none;color:var(--mut);padding:1rem">No students match. Clear the search or choose another course.</p>
+</div>
+</section>
+</main>
+
+<div class="modal" id="mod"><div class="card" role="dialog" aria-modal="true" aria-labelledby="mt">
+<div class="top" style="margin-bottom:.75rem"><h3 id="mt"></h3><button class="btn" id="mx" aria-label="Close">Close</button></div>
+<form id="fm"><input type="hidden" id="mo">
+<div class="g2"><div class="f"><label for="m-suc">SUC code</label><input id="m-suc" maxlength="10" pattern="\d{10}" required></div><div class="f"><label for="m-pw">Password (you can change it)</label><input id="m-pw" minlength="6" autocomplete="off" required></div></div>
+<div class="g2"><div class="f"><label for="m-name">Full name</label><input id="m-name" required></div><div class="f"><label for="m-age">Age</label><input id="m-age" type="number" min="16" max="40" required></div></div>
+<div class="g2"><div class="f"><label for="m-course">Course</label><select id="m-course" class="cs"></select></div><div class="f"><label for="m-sec">Section</label><input id="m-sec" required></div></div>
+<div class="g2"><div class="f"><label for="m-roll">Roll number</label><input id="m-roll" required></div><div class="f"><label for="m-att">Attendance %</label><input id="m-att" type="number" min="0" max="100" required></div></div>
+<div class="g2"><div class="f"><label for="m-cgpa">CGPA (0-10)</label><input id="m-cgpa" type="number" step="0.01" min="0" max="10" required></div><div class="f"><label for="m-m1">Mid 1 (/50)</label><input id="m-m1" type="number" min="0" max="50" required></div></div>
+<div class="f"><label for="m-m2">Mid 2 (/50)</label><input id="m-m2" type="number" min="0" max="50" required></div>
+<div class="row" style="justify-content:flex-end"><button type="button" class="btn" id="mc">Cancel</button><button class="btn p">Save student</button></div>
+</form></div></div>
+<div id="toast" role="status"></div>
+
+<script>
+const $=id=>document.getElementById(id);
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const COURSES=["BBA - Business Analytics","B.Sc - Data Science & AI","BCA - Cloud Computing","B.Com - Computer Applications","B.Tech - Artificial Intelligence"];
+const SUBJ=[["BBA-401 Predictive Business Modeling","BBA-402 Data Warehousing & SQL","BBA-403 Financial Risk & Algo Trading","BBA-404 Organizational Leadership"],
+["DSC-301 Deep Neural Networks","DSC-302 Linear Algebra & Calculus","DSC-303 Big Data (PySpark)","DSC-304 Ethics in AI"],
+["BCA-201 AWS Cloud Infrastructure","BCA-202 Docker & Kubernetes","BCA-203 Distributed Systems & Go","BCA-204 Networks & Security"],
+["BCM-101 Corporate Accounting","BCM-102 Enterprise Resource Planning","BCM-103 Corporate Law & Taxation","BCM-104 Advanced Business Analytics"],
+["CSE-401 Natural Language Processing","CSE-402 Reinforcement Learning","CSE-403 Graph Neural Frameworks","CSE-404 Computer Vision"]];
+const SALT="nexus:",ADMIN_HASH="aa323e21120e95eb240273f96d2c1b097a151040e8b73c343cf1e28cf8c35163",DEF_HASH="eaa259ddcc72a06468e49ac2537d74b4c616de7763094603afde6669fdb8d877";
+const RAW=`Madugula Sai Phani Vaishnavi Niranjan,19,0,Alpha-1,95,9.68,49,48
+Varshak P.L.S,19,1,Data-Alpha,92,9.15,46,45
+Harshak P.R.D,20,2,Cloud-Beta,88,8.84,44,43
+Pranathi Reddy,19,0,Alpha-1,96,9.45,48,47
+Varun Teja Kollipara,20,4,AI-1,84,8.52,42,40
+Siri Chandana Varma,19,3,CA-Sec1,91,9.20,47,46
+Bhargav Krishna Alluri,20,0,Alpha-1,87,8.78,43,44
+Likhitha Sri Gunturu,19,1,Data-Alpha,94,9.32,47,48
+Kalyan Ram Pothula,20,2,Cloud-Beta,83,8.12,41,39
+Harini Mounika Dandu,19,4,AI-1,97,9.75,50,49
+Venkata Sai Manoj Challa,21,0,Alpha-2,81,7.95,39,40
+Ananya Sree Rayapati,19,3,CA-Sec1,90,9.08,46,45
+Bhavana Tanmai Sunkara,20,1,Data-Beta,93,9.25,47,46
+Chaitanya Varma Penmatsa,20,2,Cloud-Alpha,86,8.45,42,41
+Deepika Rani Namburu,19,4,AI-2,95,9.50,48,49
+Eshwar Chandra Bandaru,20,0,Alpha-2,79,7.82,38,37
+Gayatri Devi Maddala,19,1,Data-Alpha,92,9.10,46,45
+Hemanth Kumar Golla,20,2,Cloud-Beta,85,8.35,42,41
+Ishwarya Lakshmi Pasumarthi,19,3,CA-Sec2,94,9.38,48,47
+Jagadeesh Babu Velagapudi,21,4,AI-1,87,8.64,43,42
+Keerthana Priya Ginjupalli,19,0,Alpha-1,96,9.60,49,48
+Madhav Swamy Gudivada,20,1,Data-Beta,89,8.92,45,44
+Navya Tejaswini Mandava,19,2,Cloud-Alpha,93,9.18,46,45
+Praveen Varma Dantuluri,20,3,CA-Sec2,82,8.05,40,39
+Ramyasri Kondaveeti,19,4,AI-2,98,9.82,50,50
+Sai Teja Vuyyuru,20,0,Alpha-2,85,8.40,42,43`;
+const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+function mkSubjects(c,att,m1,m2){const j=[1,-1,2,-2],k=[0,1,-1,0];return SUBJ[c].map((s,i)=>({code:s.slice(0,7),name:s.slice(8),att:clamp(att+j[i],0,100),m1:clamp(m1+k[i],0,50),m2:clamp(m2-k[i],0,50)}))}
+function seed(){return RAW.split("\n").map((l,i)=>{const p=l.split(","),c=+p[2];return{suc:String(2026108491+i),name:p[0],age:+p[1],course:COURSES[c],section:p[3],roll:"AP-26-"+String(i+1).padStart(3,"0"),attendance:+p[4],cgpa:+p[5],mid1:+p[6],mid2:+p[7],hash:DEF_HASH,pw:"student@2026",subjects:mkSubjects(c,+p[4],+p[6],+p[7])}})}
+const KEY="NEXUS_STUDENTS_V3";
+function load(){try{const s=localStorage.getItem(KEY);if(s)return JSON.parse(s)}catch(e){}return seed()}
+function save(d){try{localStorage.setItem(KEY,JSON.stringify(d))}catch(e){}}
+const PK="NEXUS_PENDING_V3";
+function loadP(){try{return JSON.parse(localStorage.getItem(PK))||[]}catch(e){return[]}}
+function saveP(){try{localStorage.setItem(PK,JSON.stringify(PEND))}catch(e){}}
+let PEND=loadP(),DB=load(),sort={k:"cgpa",dir:-1},charts={};
+async function sha(p){const b=await crypto.subtle.digest("SHA-256",new TextEncoder().encode(SALT+p));return[...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,"0")).join("")}
+function toast(t){const e=$("toast");e.textContent=t;e.classList.add("on");clearTimeout(toast.t);toast.t=setTimeout(()=>e.classList.remove("on"),2400)}
+function grade(g){return g>=9.5?"O":g>=9?"A+":g>=8?"A":g>=7?"B+":g>=6?"B":"C"}
+function view(id){document.querySelectorAll(".view").forEach(v=>v.classList.toggle("on",v.id===id));$("out").style.display=id==="auth"?"none":"";scrollTo(0,0)}
+function msg(t,ok){const e=$("amsg");e.className="msg "+(ok?"s":"e");e.textContent=t;e.style.display=t?"block":"none"}
+document.querySelectorAll(".cs").forEach(s=>{s.innerHTML=(s.id==="fc"?'<option value="ALL">All courses</option>':"")+COURSES.map(c=>`<option>${esc(c)}</option>`).join("")});
+document.querySelectorAll(".tabs button").forEach(b=>b.onclick=()=>{document.querySelectorAll(".tabs button").forEach(x=>x.classList.toggle("on",x===b));$("fl").style.display=b.dataset.t==="l"?"":"none";$("fr").style.display=b.dataset.t==="r"?"":"none";$("fa").style.display=b.dataset.t==="a"?"":"none";msg("")});
+$("home").onclick=$("out").onclick=()=>view("auth");
+$("theme").onclick=()=>{const r=document.documentElement,d=r.dataset.theme?r.dataset.theme==="dark":matchMedia("(prefers-color-scheme:dark)").matches;r.dataset.theme=d?"light":"dark";if($("stu").classList.contains("on")&&cur)showStudent(cur);if($("adm").classList.contains("on"))renderAdmin()};
+function tc(){const s=getComputedStyle(document.documentElement);return{ink:s.getPropertyValue("--mut").trim(),grid:s.getPropertyValue("--grid").trim(),a:s.getPropertyValue("--acc").trim(),b:s.getPropertyValue("--acc2").trim()}}
+function chart(id,cfg){if(charts[id])charts[id].destroy();charts[id]=new Chart($(id),cfg)}
+let cur=null;
+$("fl").onsubmit=async e=>{e.preventDefault();PEND=loadP();DB=load();const id=$("ls").value.trim().toLowerCase(),h=await sha($("lp").value);
+const s=DB.find(x=>(x.suc===id||x.roll.toLowerCase()===id)&&x.hash===h);
+if(!s){const r=PEND.find(x=>x.roll.toLowerCase()===id&&x.hash===h);if(r)return msg(r.status==="pending"?"Your registration is still waiting for admin approval. Try again later.":"Your registration was not approved. Please contact your admin.");return msg("SUC code, roll number or password is incorrect.")}
+msg("");e.target.reset();showStudent(s)};
+$("fr").onsubmit=async e=>{e.preventDefault();PEND=loadP();DB=load();const roll=$("rr").value.trim(),k=roll.toLowerCase();
+if(DB.some(x=>x.roll.toLowerCase()===k)||PEND.some(r=>r.roll.toLowerCase()===k&&r.status==="pending"))return msg("That roll number is already registered or waiting for approval.");
+PEND=PEND.filter(r=>r.roll.toLowerCase()!==k);
+PEND.push({id:Date.now()+"",name:$("rn").value.trim(),age:+$("ra").value,course:$("rc").value,section:$("rs").value.trim(),roll,hash:await sha($("rp").value),pw:$("rp").value,status:"pending"});saveP();e.target.reset();
+document.querySelector('[data-t="l"]').click();msg("Request sent. An admin must approve it before you can sign in. After approval, sign in with your roll number and password.",true)};
+$("fa").onsubmit=async e=>{e.preventDefault();if($("au").value.trim().toUpperCase()==="ZILLION"&&await sha($("ap").value)===ADMIN_HASH){msg("");e.target.reset();view("adm");renderAdmin()}else msg("Admin name or code is incorrect.")};
+
+function showStudent(s){cur=s;const a=s.attendance,g=s.cgpa,subs=s.subjects||[];
+$("sav").textContent=s.name[0];$("snm").textContent=s.name;$("smt").textContent=`${s.course} · Section ${s.section} · Roll ${s.roll}`;
+$("sst").innerHTML=(g>0||a>0)?`<div class="card stat big"><span>CGPA (out of 10)</span><b>${g.toFixed(2)}</b><div class="bar"><i style="width:${g*10}%"></i></div><small>${g>=8?"You are doing very well.":g>=6?"You are passing comfortably.":"Talk to your teachers about extra support."}</small></div>
+<div class="card stat big"><span>Attendance</span><b>${a}%</b><div class="bar"><i style="width:${a}%"></i></div><small>${a>=75?`${a-75} points above the 75% minimum.`:`${75-a} points below the 75% minimum. Attend every class to catch up.`}</small></div>
+<div class="card stat"><span>Mid-term 1</span><b>${s.mid1}/50</b></div><div class="card stat"><span>Mid-term 2</span><b>${s.mid2}/50</b></div>`:`<div class="card stat"><b>Not graded yet</b><small>Your CGPA, attendance and marks will show here once your admin enters them.</small></div>`;
+$("stb").innerHTML=subs.map(x=>`<tr><td><b>${esc(x.code)}</b></td><td>${esc(x.name)}</td><td><span class="b ${x.att>=75?"ok":"w"}">${x.att}%</span></td><td>${x.m1}/50</td><td>${x.m2}/50</td><td><b>${x.m1+x.m2}/100</b></td></tr>`).join("");
+view("stu");const t=tc();Chart.defaults.color=t.ink;
+chart("c1",{type:"bar",data:{labels:subs.map(x=>x.code),datasets:[{label:"Attendance %",data:subs.map(x=>x.att),backgroundColor:t.a,borderRadius:5},{label:"Mid total /100",data:subs.map(x=>x.m1+x.m2),backgroundColor:t.b,borderRadius:5}]},options:{responsive:true,maintainAspectRatio:false,scales:{y:{max:100,beginAtZero:true,grid:{color:t.grid}},x:{grid:{display:false}}}}})}
+
+function renderAdmin(){const q=$("q").value.toLowerCase(),fc=$("fc").value;
+const n=DB.length||1,avA=DB.reduce((x,s)=>x+s.attendance,0)/n,avG=DB.reduce((x,s)=>x+s.cgpa,0)/n,low=DB.filter(s=>s.attendance<75||s.cgpa<7.5);
+$("ast").innerHTML=[["Students",DB.length,"Across 5 courses"],["Average attendance",avA.toFixed(1)+"%",`${DB.filter(s=>s.attendance<75).length} below 75%`],["Average CGPA",avG.toFixed(2),`${DB.filter(s=>s.cgpa>=9).length} students at 9.0+`],["Pending requests",PEND.filter(r=>r.status==="pending").length,"Waiting for approval"]].map(c=>`<div class="card stat"><span>${c[0]}</span><b>${c[1]}</b><small>${c[2]}</small></div>`).join("");
+$("risk").innerHTML=low.length?low.slice(0,6).map(s=>`<p style="margin-bottom:.5rem"><b>${esc(s.name)}</b><br><span class="b ${s.attendance<75?"x":"w"}">${s.attendance}% attendance</span> <span class="b ${s.cgpa<7.5?"x":""}">CGPA ${s.cgpa.toFixed(2)}</span></p>`).join(""):"<p style='color:var(--mut)'>Nobody is below 75% attendance or 7.5 CGPA.</p>";
+const pq=PEND.filter(r=>r.status==="pending");
+$("reql").innerHTML=pq.length?`<div class="tw"><table><tbody>${pq.map(r=>`<tr><td><b>${esc(r.name)}</b><br><small style="color:var(--mut)">Age ${r.age}</small></td><td>${esc(r.course)}<br><small style="color:var(--mut)">Section ${esc(r.section)} · Roll ${esc(r.roll)}</small></td><td style="white-space:nowrap;text-align:right"><button class="btn p" data-a="${esc(r.id)}">Approve</button> <button class="btn d" data-r="${esc(r.id)}">Reject</button></td></tr>`).join("")}</tbody></table></div>`:"<p style='color:var(--mut)'>No requests waiting. New student registrations will appear here.</p>";
+const t=tc();Chart.defaults.color=t.ink;
+chart("c3",{type:"bar",data:{labels:COURSES.map(c=>c.split(" - ")[0]),datasets:[{label:"Avg CGPA",data:COURSES.map(c=>{const l=DB.filter(s=>s.course===c);return l.length?+(l.reduce((x,s)=>x+s.cgpa,0)/l.length).toFixed(2):0}),backgroundColor:t.a,borderRadius:5}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{min:0,max:10,grid:{color:t.grid}},x:{grid:{display:false}}}}});
+const rows=DB.filter(s=>(fc==="ALL"||s.course===fc)&&(s.name.toLowerCase().includes(q)||s.suc.includes(q)||s.roll.toLowerCase().includes(q))).sort((a,b)=>(a[sort.k]>b[sort.k]?1:a[sort.k]<b[sort.k]?-1:0)*sort.dir);
+$("empty").style.display=rows.length?"none":"block";
+$("atb").innerHTML=rows.map(s=>`<tr><td><b>${esc(s.suc)}</b></td><td>${esc(s.name)}</td><td><span class="b">${esc(s.course)}</span></td><td>${esc(s.section)} / ${esc(s.roll)}</td><td><span class="b ${s.attendance>=75?"ok":"w"}">${s.attendance}%</span></td><td><b>${s.cgpa.toFixed(2)}</b></td><td style="white-space:nowrap"><code>••••••</code> <button class="btn" data-s="${esc(s.suc)}">Show</button></td><td style="white-space:nowrap"><button class="btn" data-e="${esc(s.suc)}">Edit</button> <button class="btn d" data-d="${esc(s.suc)}">Delete</button></td></tr>`).join("")}
+$("reql").onclick=e=>{const b=e.target.closest("button");if(!b)return;const r=PEND.find(x=>x.id===(b.dataset.a||b.dataset.r));if(!r)return;
+if(b.dataset.a){let suc;do{suc="2026"+Math.floor(100000+Math.random()*900000)}while(DB.some(x=>x.suc===suc));
+DB.unshift({suc,name:r.name,age:r.age,course:r.course,section:r.section,roll:r.roll,attendance:0,cgpa:0,mid1:0,mid2:0,hash:r.hash,pw:r.pw,subjects:mkSubjects(COURSES.indexOf(r.course),0,0,0)});PEND=PEND.filter(x=>x!==r);save(DB);toast(`Approved ${r.name}. SUC code ${suc}`)}
+else{r.status="rejected";toast("Request rejected")}
+saveP();renderAdmin()};
+$("q").oninput=$("fc").onchange=renderAdmin;
+document.querySelectorAll("th[data-k]").forEach(h=>{const f=()=>{sort={k:h.dataset.k,dir:sort.k===h.dataset.k?-sort.dir:1};renderAdmin()};h.onclick=f;h.onkeydown=e=>{if(e.key==="Enter")f()}});
+$("atb").onclick=e=>{const b=e.target.closest("button");if(!b)return;if(b.dataset.s){const st=DB.find(x=>x.suc===b.dataset.s),sp=b.previousElementSibling,show=b.textContent==="Show";sp.textContent=show?(st.pw||"Not saved. Edit to set one"):"••••••";b.textContent=show?"Hide":"Show";return}
+if(b.dataset.e)openModal(b.dataset.e);if(b.dataset.d){const s=DB.find(x=>x.suc===b.dataset.d);if(confirm(`Delete ${s.name} (${s.suc})? This cannot be undone.`)){DB=DB.filter(x=>x!==s);save(DB);renderAdmin();toast("Student deleted")}}};
+const F={suc:"m-suc",name:"m-name",age:"m-age",course:"m-course",section:"m-sec",roll:"m-roll",attendance:"m-att",cgpa:"m-cgpa",mid1:"m-m1",mid2:"m-m2"};
+function openModal(suc){const s=suc?DB.find(x=>x.suc===suc):{suc:"2026"+Math.floor(100000+Math.random()*900000),name:"",age:19,course:COURSES[0],section:"Alpha-1",roll:"AP-26-"+Math.floor(100+Math.random()*900),attendance:85,cgpa:8.5,mid1:42,mid2:44};
+$("mt").textContent=suc?"Edit "+s.name:"Add student";$("mo").value=suc||"";$("m-pw").value=suc?(s.pw||""):"student@2026";$("m-pw").placeholder="At least 6 characters";
+for(const k in F)$(F[k]).value=s[k];$("mod").classList.add("on");$("m-name").focus()}
+const closeM=()=>$("mod").classList.remove("on");
+$("add").onclick=()=>openModal();$("mx").onclick=$("mc").onclick=closeM;$("mod").onclick=e=>{if(e.target===$("mod"))closeM()};
+document.addEventListener("keydown",e=>{if(e.key==="Escape")closeM()});
+$("fm").onsubmit=async e=>{e.preventDefault();const o=$("mo").value,v={};for(const k in F)v[k]=$(F[k]).value.trim();
+["age","attendance","mid1","mid2"].forEach(k=>v[k]=parseInt(v[k]));v.cgpa=parseFloat(v.cgpa);
+if(DB.some(s=>s.suc===v.suc&&s.suc!==o))return alert("That SUC code is already in use.");
+const c=COURSES.indexOf(v.course);
+if(o){const i=DB.findIndex(s=>s.suc===o),old=DB[i];DB[i]={...old,...v,hash:await sha($("m-pw").value),pw:$("m-pw").value,subjects:mkSubjects(c,v.attendance,v.mid1,v.mid2)}}
+else DB.unshift({...v,hash:await sha($("m-pw").value),pw:$("m-pw").value,subjects:mkSubjects(c,v.attendance,v.mid1,v.mid2)});
+save(DB);closeM();renderAdmin();toast(o?"Changes saved":"Student added")};
+$("rst").onclick=()=>{if(confirm("Replace all records with the 26 default students?")){DB=seed();save(DB);renderAdmin();toast("Defaults restored")}};
+$("csv").onclick=()=>{const h=["SUC","Name","Age","Course","Section","Roll","Attendance","CGPA","Mid1","Mid2"],q=v=>'"'+String(v).replace(/"/g,'""')+'"';
+const t=[h.join(",")].concat(DB.map(s=>[s.suc,s.name,s.age,s.course,s.section,s.roll,s.attendance,s.cgpa,s.mid1,s.mid2].map(q).join(","))).join("\n");
+const a=document.createElement("a");a.href="data:text/csv;charset=utf-8,"+encodeURIComponent(t);a.download="nexus-students.csv";a.click();toast("CSV exported")};
+</script>
+</body>
+</html>
